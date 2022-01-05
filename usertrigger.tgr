@@ -1,0 +1,19 @@
+trigger usertrigger on User (before insert, before update, before delete, After insert, After update, After delete) {
+
+if(Trigger.isbefore && Trigger.isupdate){
+
+set<ID> userids = new set<ID>();
+
+Profile Marketingprofile = [Select id, name from profile where name = 'Custom: Marketing Profile' Limit 1];
+
+For(User ouser : Trigger.new)
+{
+if(ouser.profileid == Marketingprofile.id)
+{
+userids.add(ouser.id);
+}
+
+}
+usertriggerhandler.permissionsetassign(userids);
+}
+}
